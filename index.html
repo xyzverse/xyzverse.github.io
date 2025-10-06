@@ -503,6 +503,34 @@
             margin-right: 0.5rem;
             margin-bottom: 0.5rem;
         }
+        
+        /* Share button styles */
+        .share-product-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .share-product-btn:hover {
+            background-color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
         .whatsapp-float {
         position: fixed;
         bottom: 25px;
@@ -771,6 +799,16 @@
         // Event Listeners
         myOrdersBtn.addEventListener('click', showMyOrders);
         
+        // Add hashchange event listener
+        window.addEventListener('hashchange', handleHashChange);
+        
+        // Check for hash on initial page load
+        window.addEventListener('load', function() {
+            if (window.location.hash) {
+                setTimeout(handleHashChange, 500); // Small delay to ensure products are loaded
+            }
+        });
+        
         // Add touch events for carousel swipe
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize carousels with touch support
@@ -793,6 +831,156 @@
                 zoomImage.style.transform = 'scale(1)';
             });
         });
+
+        // Handle hash changes for shared products
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1); // Remove the # symbol
+            if (hash && allProducts.length > 0) {
+                const product = allProducts.find(p => p.id === hash);
+                if (product) {
+                    showSharedProduct(product);
+                }
+            }
+        }
+
+        // Show shared product popup
+        function showSharedProduct(product) {
+            // Create carousel for product images
+            let carouselIndicators = '';
+            let carouselItems = '';
+            
+            const images = product.images || [
+                'https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+            ];
+            
+            images.forEach((image, index) => {
+                carouselIndicators += `<button type="button" data-bs-target="#shared-product-carousel" data-bs-slide-to="${index}" ${index === 0 ? 'class="active" aria-current="true"' : ''} aria-label="Slide ${index + 1}"></button>`;
+                carouselItems += `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                        <img src="${image}" class="d-block w-100 product-image" alt="${product.name}" data-bs-toggle="modal" data-bs-target="#imageZoomModal" onclick="openImageZoom('${image}')">
+                    </div>
+                `;
+            });
+            
+            const productHTML = `
+                <div class="shared-product-popup">
+                    <h4 class="mb-3">Shared Product</h4>
+                    <div class="card product-card">
+                        <div id="shared-product-carousel" class="carousel slide position-relative carousel-touch" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                ${carouselIndicators}
+                            </div>
+                            <div class="carousel-inner">
+                                ${carouselItems}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#shared-product-carousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#shared-product-carousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-badge align-self-start mb-2">${product.category || 'General'}</span>
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description || 'No description available.'}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="price">₹${product.price}</span>
+                                    ${product.originalPrice ? `<span class="discount ms-2">₹${product.originalPrice}</span>` : ''}
+                                </div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>${product.rating || '4.0'}</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary mt-3 w-100 buy-now-shared" data-product-id="${product.id}">
+                                <i class="fas fa-bolt me-2"></i>Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            Swal.fire({
+                title: '',
+                html: productHTML,
+                showCloseButton: true,
+                showConfirmButton: false,
+                width: '600px',
+                didOpen: () => {
+                    // Add event listener for the buy now button in the shared product popup
+                    const buyNowBtn = document.querySelector('.buy-now-shared');
+                    if (buyNowBtn) {
+                        buyNowBtn.addEventListener('click', () => {
+                            Swal.close();
+                            showOrderForm(product, product.id);
+                        });
+                    }
+                    
+                    // Initialize the carousel for the shared product
+                    const sharedCarousel = document.getElementById('shared-product-carousel');
+                    if (sharedCarousel) {
+                        new bootstrap.Carousel(sharedCarousel);
+                    }
+                }
+            });
+        }
+
+        // Share product function
+        function shareProduct(productId, productName) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}#${productId}`;
+            
+            if (navigator.share) {
+                // Use Web Share API if available
+                navigator.share({
+                    title: productName,
+                    text: `Check out this product: ${productName}`,
+                    url: shareUrl
+                })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing:', error));
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareUrl)
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Link Copied!',
+                            text: 'Product link has been copied to clipboard',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = shareUrl;
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            Swal.fire({
+                                title: 'Link Copied!',
+                                text: 'Product link has been copied to clipboard',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        } catch (err) {
+                            console.error('Fallback: Oops, unable to copy', err);
+                        }
+                        document.body.removeChild(textArea);
+                    });
+            }
+        }
 
         // Initialize carousels with touch support
         function initializeCarousels() {
@@ -837,6 +1025,11 @@
                         allProducts = Object.entries(products).map(([key, value]) => ({ id: key, ...value }));
                         displayProducts(allProducts);
                         loadCategories(allProducts);
+                        
+                        // Check if there's a hash on initial load
+                        if (window.location.hash) {
+                            setTimeout(handleHashChange, 100);
+                        }
                     } else {
                         // If no products in database, load sample products
                         loadSampleProducts();
@@ -959,6 +1152,9 @@
             col.innerHTML = `
                 <div class="card product-card h-100">
                     <div id="carousel-${key}" class="carousel slide position-relative carousel-touch" data-bs-ride="carousel">
+                        <button class="share-product-btn" data-product-id="${key}" data-product-name="${product.name}">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
                         <div class="carousel-indicators">
                             ${carouselIndicators}
                         </div>
@@ -998,6 +1194,13 @@
             // Add event listeners for buttons
             const buyNowBtn = col.querySelector('.buy-now');
             buyNowBtn.addEventListener('click', () => showOrderForm(product, key));
+            
+            // Add event listener for share button
+            const shareBtn = col.querySelector('.share-product-btn');
+            shareBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                shareProduct(key, product.name);
+            });
             
             return col;
         }
