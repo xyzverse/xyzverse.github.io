@@ -11,8 +11,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="mobile-web-app-capable" content="yes">
- <meta name="apple-mobile-web-app-capable" content="yes">
- <link rel="manifest" href="https://xyzverse.github.io/admin.webmanifest">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="https://xyzverse.github.io/admin.webmanifest">
     <style>
         :root {
             --primary-color: #f43397;
@@ -368,6 +368,83 @@
         .order-detail-value {
             color: #212529;
         }
+        
+        /* New styles for size and color options */
+        .variant-options {
+            margin: 1rem 0;
+        }
+        
+        .variant-option-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .size-options, .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .size-option, .color-option {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .size-option:hover, .color-option:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .size-option.selected, .color-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .color-option {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .color-option.selected::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .variant-input {
+            margin-bottom: 0.5rem;
+        }
+        
+        .variant-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .variant-tag .remove-variant {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+        
+        .variant-tag .remove-variant:hover {
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -492,7 +569,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h5 class="stats-number" id="totalRevenue">₹0</h5>
-                                        <p class="stats-label">Total Revenue</p>
+                                        <p class="stats-label">Delivered Orders Revenue</p>
                                     </div>
                                     <div class="align-self-center">
                                         <i class="fas fa-rupee-sign fa-2x text-muted"></i>
@@ -659,6 +736,7 @@
                                                 <option value="Beauty">Beauty</option>
                                                 <option value="Sports">Sports</option>
                                                 <option value="Books">Books</option>
+                                                <option value="Food & Grocery">Food & Grocery</option>
                                             </select>
                                         </div>
                                     </div>
@@ -684,7 +762,28 @@
                                         <button type="button" class="btn btn-outline-secondary sample-image" data-category="Fashion">Fashion</button>
                                         <button type="button" class="btn btn-outline-secondary sample-image" data-category="Electronics">Electronics</button>
                                         <button type="button" class="btn btn-outline-secondary sample-image" data-category="Home">Home</button>
+                                        <button type="button" class="btn btn-outline-secondary sample-image" data-category="Food">Food</button>
                                     </div>
+                                </div>
+                                
+                                <!-- Size Options -->
+                                <div class="mb-3">
+                                    <label for="productSizes" class="form-label">Available Sizes (Optional)</label>
+                                    <div class="input-group variant-input">
+                                        <input type="text" class="form-control" id="productSizesInput" placeholder="Enter size (e.g., S, M, L)">
+                                        <button class="btn btn-outline-secondary" type="button" id="addSizeBtn">Add</button>
+                                    </div>
+                                    <div id="sizeTags" class="mt-2"></div>
+                                </div>
+                                
+                                <!-- Color Options -->
+                                <div class="mb-3">
+                                    <label for="productColors" class="form-label">Available Colors (Optional)</label>
+                                    <div class="input-group variant-input">
+                                        <input type="text" class="form-control" id="productColorsInput" placeholder="Enter color name or hex code">
+                                        <button class="btn btn-outline-secondary" type="button" id="addColorBtn">Add</button>
+                                    </div>
+                                    <div id="colorTags" class="mt-2"></div>
                                 </div>
                             </div>
                         </div>
@@ -745,6 +844,7 @@
                                                 <option value="Beauty">Beauty</option>
                                                 <option value="Sports">Sports</option>
                                                 <option value="Books">Books</option>
+                                                <option value="Food & Grocery">Food & Grocery</option>
                                             </select>
                                         </div>
                                     </div>
@@ -770,7 +870,28 @@
                                         <button type="button" class="btn btn-outline-secondary sample-image-edit" data-category="Fashion">Fashion</button>
                                         <button type="button" class="btn btn-outline-secondary sample-image-edit" data-category="Electronics">Electronics</button>
                                         <button type="button" class="btn btn-outline-secondary sample-image-edit" data-category="Home">Home</button>
+                                        <button type="button" class="btn btn-outline-secondary sample-image-edit" data-category="Food">Food</button>
                                     </div>
+                                </div>
+                                
+                                <!-- Size Options -->
+                                <div class="mb-3">
+                                    <label for="editProductSizes" class="form-label">Available Sizes (Optional)</label>
+                                    <div class="input-group variant-input">
+                                        <input type="text" class="form-control" id="editProductSizesInput" placeholder="Enter size (e.g., S, M, L)">
+                                        <button class="btn btn-outline-secondary" type="button" id="editAddSizeBtn">Add</button>
+                                    </div>
+                                    <div id="editSizeTags" class="mt-2"></div>
+                                </div>
+                                
+                                <!-- Color Options -->
+                                <div class="mb-3">
+                                    <label for="editProductColors" class="form-label">Available Colors (Optional)</label>
+                                    <div class="input-group variant-input">
+                                        <input type="text" class="form-control" id="editProductColorsInput" placeholder="Enter color name or hex code">
+                                        <button class="btn btn-outline-secondary" type="button" id="editAddColorBtn">Add</button>
+                                    </div>
+                                    <div id="editColorTags" class="mt-2"></div>
                                 </div>
                             </div>
                         </div>
@@ -829,6 +950,14 @@
                                 <div class="order-detail-item">
                                     <span class="order-detail-label">Unit Price:</span>
                                     <span class="order-detail-value" id="detailUnitPrice"></span>
+                                </div>
+                                <div class="order-detail-item" id="detailSizeContainer" style="display: none;">
+                                    <span class="order-detail-label">Size:</span>
+                                    <span class="order-detail-value" id="detailSize"></span>
+                                </div>
+                                <div class="order-detail-item" id="detailColorContainer" style="display: none;">
+                                    <span class="order-detail-label">Color:</span>
+                                    <span class="order-detail-value" id="detailColor"></span>
                                 </div>
                             </div>
                         </div>
@@ -946,6 +1075,12 @@
         // Current selected order for details modal
         let currentOrderId = null;
         let currentProductId = null;
+        
+        // Size and Color Arrays
+        let productSizes = [];
+        let productColors = [];
+        let editProductSizes = [];
+        let editProductColors = [];
 
         // Event Listeners
         passwordForm.addEventListener('submit', handlePasswordSubmit);
@@ -957,6 +1092,12 @@
         saveProductBtn.addEventListener('click', handleAddProduct);
         updateProductBtn.addEventListener('click', handleUpdateProduct);
         updateOrderStatusBtn.addEventListener('click', handleUpdateOrderStatus);
+        
+        // Size and Color Management
+        document.getElementById('addSizeBtn').addEventListener('click', addSize);
+        document.getElementById('addColorBtn').addEventListener('click', addColor);
+        document.getElementById('editAddSizeBtn').addEventListener('click', addEditSize);
+        document.getElementById('editAddColorBtn').addEventListener('click', addEditColor);
         
         // Navigation
         document.querySelectorAll('.sidebar-menu a').forEach(link => {
@@ -1067,7 +1208,7 @@
             }
         }
 
-        // Load Dashboard Data
+        // Load Dashboard Data - UPDATED to only count delivered orders for revenue
         function loadDashboardData() {
             // Load products count
             database.ref('products').once('value')
@@ -1080,7 +1221,7 @@
                     console.error('Error loading products count:', error);
                 });
             
-            // Load orders data
+            // Load orders data - FIXED to only count delivered orders for revenue
             database.ref('orders').once('value')
                 .then((snapshot) => {
                     const orders = snapshot.val();
@@ -1088,7 +1229,7 @@
                         const orderCount = Object.keys(orders).length;
                         document.getElementById('totalOrders').textContent = orderCount;
                         
-                        // Calculate pending orders and revenue
+                        // Calculate pending orders and revenue (only from delivered orders)
                         let pendingCount = 0;
                         let revenue = 0;
                         const recentOrders = [];
@@ -1100,7 +1241,8 @@
                                 pendingCount++;
                             }
                             
-                            if (order.totalPrice) {
+                            // Only add to revenue if order is delivered
+                            if (order.status === 'delivered' && order.totalPrice) {
                                 revenue += parseFloat(order.totalPrice);
                             }
                             
@@ -1292,6 +1434,13 @@
                     'https://images.unsplash.com/photo-1628089076988-2c6708426d65?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
                     'https://images.unsplash.com/photo-1576613109753-4d487bb3436e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
                 ];
+            } else if (category === 'Food') {
+                images = [
+                    'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                    'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                    'https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                ];
             }
             
             // Set the image URLs in the appropriate form
@@ -1306,6 +1455,133 @@
                 document.getElementById('editProductImage3').value = images[2] || '';
                 document.getElementById('editProductImage4').value = images[3] || '';
             }
+        }
+
+        // Size and Color Management Functions
+        function addSize() {
+            const sizeInput = document.getElementById('productSizesInput');
+            const size = sizeInput.value.trim();
+            
+            if (size && !productSizes.includes(size)) {
+                productSizes.push(size);
+                updateSizeTags('add');
+                sizeInput.value = '';
+            }
+        }
+
+        function addColor() {
+            const colorInput = document.getElementById('productColorsInput');
+            const color = colorInput.value.trim();
+            
+            if (color && !productColors.includes(color)) {
+                productColors.push(color);
+                updateColorTags('add');
+                colorInput.value = '';
+            }
+        }
+
+        function addEditSize() {
+            const sizeInput = document.getElementById('editProductSizesInput');
+            const size = sizeInput.value.trim();
+            
+            if (size && !editProductSizes.includes(size)) {
+                editProductSizes.push(size);
+                updateSizeTags('edit');
+                sizeInput.value = '';
+            }
+        }
+
+        function addEditColor() {
+            const colorInput = document.getElementById('editProductColorsInput');
+            const color = colorInput.value.trim();
+            
+            if (color && !editProductColors.includes(color)) {
+                editProductColors.push(color);
+                updateColorTags('edit');
+                colorInput.value = '';
+            }
+        }
+
+        function updateSizeTags(formType) {
+            const tagsContainer = formType === 'add' ? 
+                document.getElementById('sizeTags') : 
+                document.getElementById('editSizeTags');
+            
+            const sizes = formType === 'add' ? productSizes : editProductSizes;
+            
+            tagsContainer.innerHTML = '';
+            sizes.forEach((size, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'variant-tag';
+                tag.innerHTML = `
+                    ${size}
+                    <span class="remove-variant" data-index="${index}" data-type="size">
+                        <i class="fas fa-times"></i>
+                    </span>
+                `;
+                tagsContainer.appendChild(tag);
+            });
+            
+            // Add event listeners to remove buttons
+            tagsContainer.querySelectorAll('.remove-variant').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const type = this.getAttribute('data-type');
+                    
+                    if (formType === 'add') {
+                        if (type === 'size') {
+                            productSizes.splice(index, 1);
+                            updateSizeTags('add');
+                        }
+                    } else {
+                        if (type === 'size') {
+                            editProductSizes.splice(index, 1);
+                            updateSizeTags('edit');
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateColorTags(formType) {
+            const tagsContainer = formType === 'add' ? 
+                document.getElementById('colorTags') : 
+                document.getElementById('editColorTags');
+            
+            const colors = formType === 'add' ? productColors : editProductColors;
+            
+            tagsContainer.innerHTML = '';
+            colors.forEach((color, index) => {
+                const tag = document.createElement('span');
+                tag.className = 'variant-tag';
+                tag.innerHTML = `
+                    ${color}
+                    <span class="remove-variant" data-index="${index}" data-type="color">
+                        <i class="fas fa-times"></i>
+                    </span>
+                `;
+                tagsContainer.appendChild(tag);
+            });
+            
+            // Add event listeners to remove buttons
+            tagsContainer.querySelectorAll('.remove-variant').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const type = this.getAttribute('data-type');
+                    
+                    if (formType === 'add') {
+                        if (type === 'color') {
+                            productColors.splice(index, 1);
+                            updateColorTags('add');
+                        }
+                    } else {
+                        if (type === 'color') {
+                            editProductColors.splice(index, 1);
+                            updateColorTags('edit');
+                        }
+                    }
+                });
+            });
         }
 
         function handleAddProduct() {
@@ -1358,6 +1634,15 @@
                 product.images = images;
             }
             
+            // Add sizes and colors if provided
+            if (productSizes.length > 0) {
+                product.sizes = productSizes;
+            }
+            
+            if (productColors.length > 0) {
+                product.colors = productColors;
+            }
+            
             // Save product to database
             const newProductRef = database.ref('products').push();
             newProductRef.set(product)
@@ -1372,6 +1657,12 @@
                     // Close modal and reset form
                     addProductModal.hide();
                     document.getElementById('addProductForm').reset();
+                    
+                    // Reset sizes and colors
+                    productSizes = [];
+                    productColors = [];
+                    updateSizeTags('add');
+                    updateColorTags('add');
                     
                     // Reload products
                     loadProducts();
@@ -1412,6 +1703,12 @@
                     document.getElementById(`editProductImage${i+1}`).value = imageUrl;
                 }
             }
+            
+            // Set sizes and colors
+            editProductSizes = product.sizes || [];
+            editProductColors = product.colors || [];
+            updateSizeTags('edit');
+            updateColorTags('edit');
             
             // Show the modal
             editProductModal.show();
@@ -1466,6 +1763,15 @@
             // Add images if provided
             if (images.length > 0) {
                 updatedProduct.images = images;
+            }
+            
+            // Add sizes and colors if provided
+            if (editProductSizes.length > 0) {
+                updatedProduct.sizes = editProductSizes;
+            }
+            
+            if (editProductColors.length > 0) {
+                updatedProduct.colors = editProductColors;
             }
             
             // Update product in database
@@ -1621,6 +1927,21 @@
             document.getElementById('detailCustomerAddress').textContent = order.customerAddress;
             document.getElementById('detailCustomerCity').textContent = order.customerCity;
             document.getElementById('detailCustomerPincode').textContent = order.customerPincode;
+            
+            // Show size and color if available
+            if (order.selectedSize) {
+                document.getElementById('detailSizeContainer').style.display = 'flex';
+                document.getElementById('detailSize').textContent = order.selectedSize;
+            } else {
+                document.getElementById('detailSizeContainer').style.display = 'none';
+            }
+            
+            if (order.selectedColor) {
+                document.getElementById('detailColorContainer').style.display = 'flex';
+                document.getElementById('detailColor').textContent = order.selectedColor;
+            } else {
+                document.getElementById('detailColorContainer').style.display = 'none';
+            }
             
             // Set current status in dropdown
             document.getElementById('orderStatusUpdate').value = order.status;
