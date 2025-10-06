@@ -935,7 +935,7 @@
         function createProductCard(product, key) {
             const col = document.createElement('div');
             col.className = 'col-md-6 col-lg-4 col-xl-3';
-            
+            col.setAttribute("id",key);
             // Create carousel for product images
             let carouselIndicators = '';
             let carouselItems = '';
