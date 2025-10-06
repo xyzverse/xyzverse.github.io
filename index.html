@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopEasy - Online Shopping</title>
+    <title>ShopEasy - Easy Shopping</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
@@ -28,11 +28,13 @@
         .navbar-brand {
             font-weight: bold;
             color: var(--primary-color) !important;
+            font-size: 1.8rem;
         }
         
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
+            font-weight: 600;
         }
         
         .btn-primary:hover {
@@ -42,12 +44,15 @@
         
         .card {
             border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
+            border-radius: 12px;
+            overflow: hidden;
         }
         
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
         
         .product-image {
@@ -58,6 +63,7 @@
         .price {
             color: var(--primary-color);
             font-weight: bold;
+            font-size: 1.2rem;
         }
         
         .discount {
@@ -89,6 +95,7 @@
             position: relative;
             margin-bottom: 2rem;
             padding-bottom: 0.5rem;
+            font-weight: 700;
         }
         
         .section-title::after {
@@ -96,9 +103,10 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 50px;
-            height: 3px;
+            width: 80px;
+            height: 4px;
             background-color: var(--primary-color);
+            border-radius: 2px;
         }
         
         .footer {
@@ -108,86 +116,142 @@
             margin-top: 3rem;
         }
         
-        .auth-container {
-            max-width: 400px;
-            margin: 5rem auto;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        .guest-checkout-form .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #444;
         }
         
-        .admin-panel {
-            background-color: #f8f9fa;
-            min-height: 100vh;
-        }
-        
-        .sidebar {
-            background-color: #343a40;
-            color: white;
-            min-height: 100vh;
-            padding-top: 2rem;
-        }
-        
-        .sidebar a {
-            color: #adb5bd;
-            text-decoration: none;
-            display: block;
-            padding: 0.75rem 1.5rem;
+        .guest-checkout-form .form-control {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
             transition: all 0.3s;
         }
         
-        .sidebar a:hover, .sidebar a.active {
-            color: white;
-            background-color: #495057;
+        .guest-checkout-form .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(244, 51, 151, 0.25);
         }
         
-        .admin-content {
+        .order-summary {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        
+        .quantity-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            margin: 0 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .carousel-indicators {
+            bottom: -40px;
+        }
+        
+        .carousel-indicators button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+        
+        .carousel-indicators button.active {
+            background-color: var(--primary-color);
+        }
+        
+        .carousel-control-prev, .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .product-card:hover .carousel-control-prev,
+        .product-card:hover .carousel-control-next {
+            opacity: 1;
+        }
+        
+        .swal2-popup {
+            border-radius: 15px;
             padding: 2rem;
         }
         
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .product-card {
-            position: relative;
-        }
-        
-        .wishlist-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            color: #6c757d;
-        }
-        
-        .wishlist-btn.active {
+        .swal2-title {
             color: var(--primary-color);
+            font-weight: 700;
         }
         
-        .user-greeting {
-            color: var(--primary-color);
+        .form-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section-title {
             font-weight: 600;
+            color: #555;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .highlight-box {
+            background-color: #fff9f9;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
@@ -195,50 +259,14 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="index.html">ShopEasy</a>
+            <a class="navbar-brand" href="#">ShopEasy</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            Categories
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Fashion</a></li>
-                            <li><a class="dropdown-item" href="#">Electronics</a></li>
-                            <li><a class="dropdown-item" href="#">Home & Kitchen</a></li>
-                            <li><a class="dropdown-item" href="#">Beauty</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex me-3">
-                    <input class="form-control me-2" type="search" placeholder="Search products...">
-                    <button class="btn btn-outline-primary" type="submit">Search</button>
-                </form>
-                <ul class="navbar-nav">
-                    <li class="nav-item position-relative">
-                        <a class="nav-link" href="#" id="cartIcon">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-badge">0</span>
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user"></i>
-                            <span id="userGreeting" class="user-greeting ms-1"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" id="loginBtn">Login</a></li>
-                            <li><a class="dropdown-item" href="#" id="registerBtn">Register</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="admin.html" id="adminLink" style="display: none;">Admin Panel</a></li>
-                            <li><a class="dropdown-item" href="#" id="logoutBtn" style="display: none;">Logout</a></li>
-                        </ul>
+                        <a class="nav-link fw-bold" href="admin.html">Admin Panel</a>
                     </li>
                 </ul>
             </div>
@@ -250,7 +278,8 @@
         <div class="container text-center">
             <h1 class="display-4 fw-bold">Shop the Latest Trends</h1>
             <p class="lead">Discover amazing products at unbeatable prices</p>
-            <a href="#products" class="btn btn-light btn-lg mt-3">Shop Now</a>
+            <p>No account needed! Buy directly as a guest.</p>
+            <a href="#products" class="btn btn-light btn-lg mt-3 px-4 py-2 fw-bold">Shop Now</a>
         </div>
     </section>
 
@@ -304,82 +333,12 @@
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Login to Your Account</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label for="loginEmail" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="loginEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="loginPassword" required>
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </form>
-                    <div class="text-center mt-3">
-                        <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div class="modal fade" id="registerModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create New Account</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="registerForm">
-                        <div class="mb-3">
-                            <label for="registerName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="registerName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="registerEmail" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="registerEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="registerPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="registerPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="registerConfirmPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Register</button>
-                    </form>
-                    <div class="text-center mt-3">
-                        <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Firebase App (the core Firebase SDK) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <!-- Firebase Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -398,232 +357,10 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const database = firebase.database();
 
         // DOM Elements
-        const loginBtn = document.getElementById('loginBtn');
-        const registerBtn = document.getElementById('registerBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const adminLink = document.getElementById('adminLink');
-        const userGreeting = document.getElementById('userGreeting');
-        const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-        const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
-        const showRegister = document.getElementById('showRegister');
-        const showLogin = document.getElementById('showLogin');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
         const productsContainer = document.getElementById('productsContainer');
-
-        // Event Listeners
-        loginBtn.addEventListener('click', () => loginModal.show());
-        registerBtn.addEventListener('click', () => registerModal.show());
-        showRegister.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginModal.hide();
-            registerModal.show();
-        });
-        showLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            registerModal.hide();
-            loginModal.show();
-        });
-        logoutBtn.addEventListener('click', handleLogout);
-        loginForm.addEventListener('submit', handleLogin);
-        registerForm.addEventListener('submit', handleRegister);
-
-        // Authentication State Observer
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in
-                loginBtn.style.display = 'none';
-                registerBtn.style.display = 'none';
-                logoutBtn.style.display = 'block';
-                
-                // Get user data from database
-                database.ref('users/' + user.uid).once('value')
-                    .then((snapshot) => {
-                        const userData = snapshot.val();
-                        if (userData) {
-                            userGreeting.textContent = `Hi, ${userData.name.split(' ')[0]}`;
-                            
-                            // Check if user is admin
-                            if (userData.isAdmin) {
-                                adminLink.style.display = 'block';
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error getting user data:', error);
-                    });
-                
-                // Show success message if user just registered
-                if (sessionStorage.getItem('newUser') === 'true') {
-                    Swal.fire({
-                        title: 'Registration Successful!',
-                        text: 'A verification email has been sent to your email address. Please verify your email before logging in.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                    sessionStorage.removeItem('newUser');
-                }
-            } else {
-                // User is signed out
-                loginBtn.style.display = 'block';
-                registerBtn.style.display = 'block';
-                logoutBtn.style.display = 'none';
-                adminLink.style.display = 'none';
-                userGreeting.textContent = '';
-            }
-        });
-
-        // Functions
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Signed in
-                    const user = userCredential.user;
-                    if (!user.emailVerified) {
-                        Swal.fire({
-                            title: 'Email Not Verified',
-                            text: 'Please verify your email before logging in. Check your inbox for the verification email.',
-                            icon: 'warning',
-                            confirmButtonText: 'OK'
-                        });
-                        auth.signOut();
-                        return;
-                    }
-                    
-                    loginModal.hide();
-                    Swal.fire({
-                        title: 'Login Successful!',
-                        text: 'Welcome back to ShopEasy!',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    let errorMessage = 'An error occurred during login.';
-                    
-                    if (errorCode === 'auth/user-not-found') {
-                        errorMessage = 'No account found with this email.';
-                    } else if (errorCode === 'auth/wrong-password') {
-                        errorMessage = 'Incorrect password.';
-                    } else if (errorCode === 'auth/invalid-email') {
-                        errorMessage = 'Invalid email address.';
-                    } else if (errorCode === 'auth/too-many-requests') {
-                        errorMessage = 'Too many failed login attempts. Please try again later.';
-                    }
-                    
-                    Swal.fire({
-                        title: 'Login Failed',
-                        text: errorMessage,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                });
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            if (password !== confirmPassword) {
-                Swal.fire({
-                    title: 'Password Mismatch',
-                    text: 'Passwords do not match.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-            
-            if (password.length < 6) {
-                Swal.fire({
-                    title: 'Weak Password',
-                    text: 'Password should be at least 6 characters long.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-            
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Signed in
-                    const user = userCredential.user;
-                    
-                    // Send email verification
-                    user.sendEmailVerification()
-                        .then(() => {
-                            console.log('Verification email sent');
-                        })
-                        .catch((error) => {
-                            console.error('Error sending verification email:', error);
-                        });
-                    
-                    // Save user data to database
-                    database.ref('users/' + user.uid).set({
-                        name: name,
-                        email: email,
-                        createdAt: new Date().toISOString(),
-                        isAdmin: false
-                    });
-                    
-                    // Mark as new user for welcome message
-                    sessionStorage.setItem('newUser', 'true');
-                    
-                    registerModal.hide();
-                    auth.signOut(); // Sign out until email is verified
-                    
-                    // Clear form
-                    registerForm.reset();
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    let errorMessage = 'An error occurred during registration.';
-                    
-                    if (errorCode === 'auth/email-already-in-use') {
-                        errorMessage = 'An account with this email already exists.';
-                    } else if (errorCode === 'auth/weak-password') {
-                        errorMessage = 'Password is too weak.';
-                    } else if (errorCode === 'auth/invalid-email') {
-                        errorMessage = 'Invalid email address.';
-                    }
-                    
-                    Swal.fire({
-                        title: 'Registration Failed',
-                        text: errorMessage,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                });
-        }
-
-        function handleLogout() {
-            auth.signOut()
-                .then(() => {
-                    Swal.fire({
-                        title: 'Logged Out',
-                        text: 'You have been successfully logged out.',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                })
-                .catch((error) => {
-                    console.error('Logout error:', error);
-                });
-        }
 
         // Load products from database
         function loadProducts() {
@@ -654,12 +391,44 @@
             const col = document.createElement('div');
             col.className = 'col-md-6 col-lg-4 col-xl-3';
             
+            // Create carousel for product images
+            let carouselIndicators = '';
+            let carouselItems = '';
+            
+            const images = product.images || [
+                'https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+            ];
+            
+            images.forEach((image, index) => {
+                carouselIndicators += `<button type="button" data-bs-target="#carousel-${key}" data-bs-slide-to="${index}" ${index === 0 ? 'class="active" aria-current="true"' : ''} aria-label="Slide ${index + 1}"></button>`;
+                carouselItems += `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                        <img src="${image}" class="d-block w-100 product-image" alt="${product.name}">
+                    </div>
+                `;
+            });
+            
             col.innerHTML = `
                 <div class="card product-card h-100">
-                    <button class="wishlist-btn" data-product-id="${key}">
-                        <i class="far fa-heart"></i>
-                    </button>
-                    <img src="${product.image || 'https://via.placeholder.com/300x200?text=Product+Image'}" class="card-img-top product-image" alt="${product.name}">
+                    <div id="carousel-${key}" class="carousel slide position-relative" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            ${carouselIndicators}
+                        </div>
+                        <div class="carousel-inner">
+                            ${carouselItems}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${key}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-${key}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
                     <div class="card-body d-flex flex-column">
                         <span class="category-badge align-self-start mb-2">${product.category || 'General'}</span>
                         <h5 class="card-title">${product.name}</h5>
@@ -674,85 +443,250 @@
                                 <span>${product.rating || '4.0'}</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary mt-3 add-to-cart" data-product-id="${key}">
-                            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                        <button class="btn btn-primary mt-3 buy-now" data-product-id="${key}">
+                            <i class="fas fa-bolt me-2"></i>Buy Now
                         </button>
                     </div>
                 </div>
             `;
             
             // Add event listeners for buttons
-            const wishlistBtn = col.querySelector('.wishlist-btn');
-            const addToCartBtn = col.querySelector('.add-to-cart');
-            
-            wishlistBtn.addEventListener('click', toggleWishlist);
-            addToCartBtn.addEventListener('click', addToCart);
+            const buyNowBtn = col.querySelector('.buy-now');
+            buyNowBtn.addEventListener('click', () => showOrderForm(product, key));
             
             return col;
         }
 
-        function toggleWishlist(e) {
-            const user = auth.currentUser;
-            if (!user) {
-                Swal.fire({
-                    title: 'Login Required',
-                    text: 'Please login to add items to your wishlist.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
+        function showOrderForm(product, productId) {
+            let quantity = 1;
+            const unitPrice = product.price;
+            let totalPrice = unitPrice;
             
-            const productId = e.currentTarget.getAttribute('data-product-id');
-            const icon = e.currentTarget.querySelector('i');
+            // Create order form HTML
+            const orderFormHTML = `
+                <div class="guest-checkout-form">
+                    <div class="highlight-box">
+                        <h6 class="mb-2"><i class="fas fa-info-circle me-2"></i>Complete your purchase</h6>
+                        <p class="mb-0">Fill in your details below. We'll contact you to confirm your order.</p>
+                    </div>
+                    
+                    <div class="order-summary">
+                        <h6 class="form-section-title">Order Summary</h6>
+                        <div class="order-item">
+                            <span>${product.name}</span>
+                            <span>₹${unitPrice}</span>
+                        </div>
+                        <div class="quantity-selector">
+                            <span class="me-3">Quantity:</span>
+                            <button class="quantity-btn minus-btn">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="10">
+                            <button class="quantity-btn plus-btn">+</button>
+                        </div>
+                        <hr>
+                        <div class="order-item order-total">
+                            <span>Total</span>
+                            <span id="totalPrice">₹${totalPrice}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h6 class="form-section-title">Personal Details</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="customerName" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="customerName" required placeholder="Enter your full name">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="customerPhone" class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="customerPhone" required placeholder="Enter your 10-digit phone number">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="customerEmail" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="customerEmail" required placeholder="Enter your email address">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h6 class="form-section-title">Shipping Address</h6>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="customerAddress" class="form-label">Full Address *</label>
+                                <textarea class="form-control" id="customerAddress" rows="2" required placeholder="Enter your complete address"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="customerPincode" class="form-label">PIN Code *</label>
+                                <input type="text" class="form-control" id="customerPincode" required placeholder="Enter your PIN code">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="customerCity" class="form-label">City *</label>
+                                <input type="text" class="form-control" id="customerCity" required placeholder="Enter your city">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="customerState" class="form-label">State *</label>
+                                <input type="text" class="form-control" id="customerState" required placeholder="Enter your state">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-check mt-3">
+                        <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                        <label class="form-check-label" for="agreeTerms">
+                            I agree to the <a href="#">terms and conditions</a> and <a href="#">privacy policy</a>
+                        </label>
+                    </div>
+                </div>
+            `;
             
-            if (icon.classList.contains('far')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas', 'active');
-                Swal.fire({
-                    title: 'Added to Wishlist!',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1000
-                });
-            } else {
-                icon.classList.remove('fas', 'active');
-                icon.classList.add('far');
-                Swal.fire({
-                    title: 'Removed from Wishlist',
-                    icon: 'info',
-                    showConfirmButton: false,
-                    timer: 1000
-                });
-            }
+            const { value: formValues } = Swal.fire({
+                title: 'Complete Your Order',
+                html: orderFormHTML,
+                showCancelButton: true,
+                confirmButtonText: 'Place Order',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#f43397',
+                width: '750px',
+                focusConfirm: false,
+                didOpen: () => {
+                    // Add quantity change functionality
+                    const minusBtn = Swal.getPopup().querySelector('.minus-btn');
+                    const plusBtn = Swal.getPopup().querySelector('.plus-btn');
+                    const quantityInput = Swal.getPopup().querySelector('.quantity-input');
+                    const totalPriceElement = Swal.getPopup().querySelector('#totalPrice');
+                    
+                    function updateTotalPrice() {
+                        quantity = parseInt(quantityInput.value);
+                        if (quantity < 1) quantity = 1;
+                        if (quantity > 10) quantity = 10;
+                        quantityInput.value = quantity;
+                        totalPrice = unitPrice * quantity;
+                        totalPriceElement.textContent = `₹${totalPrice}`;
+                    }
+                    
+                    minusBtn.addEventListener('click', () => {
+                        quantityInput.value = parseInt(quantityInput.value) - 1;
+                        updateTotalPrice();
+                    });
+                    
+                    plusBtn.addEventListener('click', () => {
+                        quantityInput.value = parseInt(quantityInput.value) + 1;
+                        updateTotalPrice();
+                    });
+                    
+                    quantityInput.addEventListener('change', updateTotalPrice);
+                },
+                preConfirm: () => {
+                    const name = document.getElementById('customerName').value;
+                    const phone = document.getElementById('customerPhone').value;
+                    const email = document.getElementById('customerEmail').value;
+                    const address = document.getElementById('customerAddress').value;
+                    const pincode = document.getElementById('customerPincode').value;
+                    const city = document.getElementById('customerCity').value;
+                    const state = document.getElementById('customerState').value;
+                    const agreeTerms = document.getElementById('agreeTerms').checked;
+                    
+                    // Validation
+                    if (!name || !phone || !email || !address || !pincode || !city || !state) {
+                        Swal.showValidationMessage('Please fill in all required fields');
+                        return false;
+                    }
+                    
+                    if (!agreeTerms) {
+                        Swal.showValidationMessage('Please agree to the terms and conditions');
+                        return false;
+                    }
+                    
+                    if (phone.length !== 10 || isNaN(phone)) {
+                        Swal.showValidationMessage('Please enter a valid 10-digit phone number');
+                        return false;
+                    }
+                    
+                    if (pincode.length !== 6 || isNaN(pincode)) {
+                        Swal.showValidationMessage('Please enter a valid 6-digit PIN code');
+                        return false;
+                    }
+                    
+                    // Return order data
+                    return {
+                        productId: productId,
+                        productName: product.name,
+                        productPrice: unitPrice,
+                        quantity: quantity,
+                        totalPrice: totalPrice,
+                        customerName: name,
+                        customerPhone: phone,
+                        customerEmail: email,
+                        customerAddress: address,
+                        customerPincode: pincode,
+                        customerCity: city,
+                        customerState: state
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const orderData = result.value;
+                    saveOrderToFirebase(orderData);
+                }
+            });
         }
 
-        function addToCart(e) {
-            const user = auth.currentUser;
-            if (!user) {
-                Swal.fire({
-                    title: 'Login Required',
-                    text: 'Please login to add items to your cart.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-            
-            const productId = e.currentTarget.getAttribute('data-product-id');
-            
-            // In a real app, you would add this to the user's cart in the database
+        function saveOrderToFirebase(orderData) {
+            // Show loading state
             Swal.fire({
-                title: 'Added to Cart!',
-                text: 'Product has been added to your cart.',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
+                title: 'Processing Order...',
+                text: 'Please wait while we save your order',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             });
             
-            // Update cart badge
-            const cartBadge = document.querySelector('.cart-badge');
-            cartBadge.textContent = parseInt(cartBadge.textContent) + 1;
+            // Generate a unique order ID
+            const orderId = 'ORD' + Date.now();
+            
+            // Prepare complete order data
+            const completeOrderData = {
+                ...orderData,
+                orderId: orderId,
+                orderDate: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            // Save to Firebase
+            database.ref('orders/' + orderId).set(completeOrderData)
+                .then(() => {
+                    Swal.fire({
+                        title: 'Order Placed Successfully!',
+                        html: `
+                            <div class="text-center">
+                                <i class="fas fa-check-circle text-success mb-3" style="font-size: 3rem;"></i>
+                                <p>Thank you for your order, <strong>${orderData.customerName}</strong>!</p>
+                                <p>Your order ID is: <strong>${orderId}</strong></p>
+                                <p>Total Amount: <strong>₹${orderData.totalPrice}</strong></p>
+                                <p>Quantity: <strong>${orderData.quantity}</strong></p>
+                                <p>We will contact you at <strong>${orderData.customerPhone}</strong> for order confirmation.</p>
+                            </div>
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'Continue Shopping',
+                        confirmButtonColor: '#f43397'
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error saving order:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'There was a problem placing your order. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
         }
 
         // Load sample products for demo (if Firebase is not configured or no products exist)
@@ -760,55 +694,58 @@
             const sampleProducts = [
                 {
                     name: "Women's Floral Dress",
-                    description: "Beautiful floral print dress for summer occasions.",
+                    description: "Beautiful floral print dress for summer occasions. Made with high-quality fabric for maximum comfort.",
                     price: 899,
                     originalPrice: 1299,
                     category: "Fashion",
                     rating: 4.2,
-                    image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    images: [
+                        "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                    ]
                 },
                 {
                     name: "Wireless Bluetooth Headphones",
-                    description: "High-quality sound with noise cancellation feature.",
+                    description: "High-quality sound with noise cancellation feature. Perfect for music lovers and professionals.",
                     price: 1999,
                     originalPrice: 2999,
                     category: "Electronics",
                     rating: 4.5,
-                    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    images: [
+                        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1546435770-a3e426bf472b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                    ]
                 },
                 {
                     name: "Stainless Steel Water Bottle",
-                    description: "Keep your drinks hot or cold for hours.",
+                    description: "Keep your drinks hot or cold for hours. Eco-friendly and durable design.",
                     price: 499,
                     category: "Home & Kitchen",
                     rating: 4.0,
-                    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    images: [
+                        "https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1605163907883-244cb1c2be8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1628089076988-2c6708426d65?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1576613109753-4d487bb3436e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                    ]
                 },
                 {
                     name: "Men's Casual Shirt",
-                    description: "Comfortable cotton shirt for everyday wear.",
+                    description: "Comfortable cotton shirt for everyday wear. Perfect for casual outings and office wear.",
                     price: 599,
                     originalPrice: 899,
                     category: "Fashion",
                     rating: 4.3,
-                    image: "https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-                },
-                {
-                    name: "Smart Fitness Band",
-                    description: "Track your steps, heart rate, and sleep patterns.",
-                    price: 2499,
-                    originalPrice: 3499,
-                    category: "Electronics",
-                    rating: 4.1,
-                    image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-                },
-                {
-                    name: "Ceramic Coffee Mug Set",
-                    description: "Set of 4 elegant ceramic mugs for your morning coffee.",
-                    price: 699,
-                    category: "Home & Kitchen",
-                    rating: 4.4,
-                    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    images: [
+                        "https://images.unsplash.com/photo-1621072156002-e2fccdc0b176?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                    ]
                 }
             ];
             
