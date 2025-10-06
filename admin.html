@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - ShopEasy</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f43397;
+            --secondary-color: #ff6b6b;
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #6c757d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+        
+        .admin-panel {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+            padding-top: 2rem;
+        }
+        
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+            display: block;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            color: white;
+            background-color: #495057;
+        }
+        
+        .admin-content {
+            padding: 2rem;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #d12a7f;
+            border-color: #d12a7f;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-image-preview {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            border-top: none;
+        }
+        
+        .action-buttons .btn {
+            margin-right: 5px;
+        }
+        
+        .stats-card {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .user-greeting {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">ShopEasy Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                            <span id="userGreeting" class="user-greeting ms-1"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="index.html"><i class="fas fa-store me-2"></i>View Store</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="d-flex flex-column">
+                    <a href="#" class="active"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                    <a href="#products-section"><i class="fas fa-box me-2"></i> Products</a>
+                    <a href="#add-product-section"><i class="fas fa-plus-circle me-2"></i> Add Product</a>
+                    <a href="#"><i class="fas fa-users me-2"></i> Users</a>
+                    <a href="#"><i class="fas fa-shopping-cart me-2"></i> Orders</a>
+                    <a href="#"><i class="fas fa-chart-bar me-2"></i> Analytics</a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 admin-content">
+                <!-- Dashboard Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Products</h5>
+                                <h2 class="card-text" id="totalProducts">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Orders</h5>
+                                <h2 class="card-text">124</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Users</h5>
+                                <h2 class="card-text">542</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Revenue</h5>
+                                <h2 class="card-text">₹84,299</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Product Form -->
+                <div class="card mb-4" id="add-product-section">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i> Add New Product</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="addProductForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="productName" class="form-label">Product Name</label>
+                                        <input type="text" class="form-control" id="productName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="productDescription" class="form-label">Description</label>
+                                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="productPrice" class="form-label">Price (₹)</label>
+                                                <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="productOriginalPrice" class="form-label">Original Price (₹)</label>
+                                                <input type="number" class="form-control" id="productOriginalPrice" min="0" step="0.01">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="productCategory" class="form-label">Category</label>
+                                                <select class="form-select" id="productCategory" required>
+                                                    <option value="">Select Category</option>
+                                                    <option value="Fashion">Fashion</option>
+                                                    <option value="Electronics">Electronics</option>
+                                                    <option value="Home & Kitchen">Home & Kitchen</option>
+                                                    <option value="Beauty">Beauty</option>
+                                                    <option value="Sports">Sports</option>
+                                                    <option value="Books">Books</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="productRating" class="form-label">Rating</label>
+                                                <input type="number" class="form-control" id="productRating" min="0" max="5" step="0.1" value="4.0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="productImage" class="form-label">Product Image URL</label>
+                                        <input type="url" class="form-control" id="productImage" placeholder="https://example.com/image.jpg">
+                                        <div class="form-text">Paste a direct image URL here</div>
+                                    </div>
+                                    <div id="imagePreviewContainer" class="mb-3" style="display: none;">
+                                        <label class="form-label">Image Preview</label>
+                                        <div>
+                                            <img id="imagePreview" class="product-image-preview" src="" alt="Product image preview">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Or Select Sample Image</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button type="button" class="btn btn-outline-secondary sample-image" data-image="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                                Fashion
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary sample-image" data-image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                                Electronics
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary sample-image" data-image="https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                                Home
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary me-2" id="resetForm">Reset Form</button>
+                                <button type="submit" class="btn btn-primary" id="submitProductBtn">
+                                    <i class="fas fa-plus me-2"></i>Add Product
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Products List -->
+                <div class="card" id="products-section">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-box me-2"></i> Manage Products</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="productsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Rating</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTableBody">
+                                    <!-- Products will be loaded here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editProductName" class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="editProductName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editProductDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="editProductDescription" rows="3" required></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="editProductPrice" class="form-label">Price (₹)</label>
+                                            <input type="number" class="form-control" id="editProductPrice" min="0" step="0.01" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="editProductOriginalPrice" class="form-label">Original Price (₹)</label>
+                                            <input type="number" class="form-control" id="editProductOriginalPrice" min="0" step="0.01">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="editProductCategory" class="form-label">Category</label>
+                                            <select class="form-select" id="editProductCategory" required>
+                                                <option value="">Select Category</option>
+                                                <option value="Fashion">Fashion</option>
+                                                <option value="Electronics">Electronics</option>
+                                                <option value="Home & Kitchen">Home & Kitchen</option>
+                                                <option value="Beauty">Beauty</option>
+                                                <option value="Sports">Sports</option>
+                                                <option value="Books">Books</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="editProductRating" class="form-label">Rating</label>
+                                            <input type="number" class="form-control" id="editProductRating" min="0" max="5" step="0.1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editProductImage" class="form-label">Product Image URL</label>
+                                    <input type="url" class="form-control" id="editProductImage" placeholder="https://example.com/image.jpg">
+                                </div>
+                                <div id="editImagePreviewContainer" class="mb-3">
+                                    <label class="form-label">Image Preview</label>
+                                    <div>
+                                        <img id="editImagePreview" class="product-image-preview" src="" alt="Product image preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="updateProductBtn">Update Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // Firebase configuration with your credentials
+        const firebaseConfig = {
+            apiKey: "AIzaSyDcxsWDh_bvT9akEJfgZ8EtTj6aQyS2sOg",
+            authDomain: "sagar-314f1.firebaseapp.com",
+            databaseURL: "https://sagar-314f1-default-rtdb.firebaseio.com",
+            projectId: "sagar-314f1",
+            storageBucket: "sagar-314f1.firebasestorage.app",
+            messagingSenderId: "988476325571",
+            appId: "1:988476325571:web:2dfeef2e49217da2b9ac76",
+            measurementId: "G-B0N4D6WLHJ"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // DOM Elements
+        const userGreeting = document.getElementById('userGreeting');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const addProductForm = document.getElementById('addProductForm');
+        const editProductForm = document.getElementById('editProductForm');
+        const resetFormBtn = document.getElementById('resetForm');
+        const submitProductBtn = document.getElementById('submitProductBtn');
+        const updateProductBtn = document.getElementById('updateProductBtn');
+        const productsTableBody = document.getElementById('productsTableBody');
+        const totalProducts = document.getElementById('totalProducts');
+        const productImage = document.getElementById('productImage');
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        const editProductImage = document.getElementById('editProductImage');
+        const editImagePreview = document.getElementById('editImagePreview');
+        const editImagePreviewContainer = document.getElementById('editImagePreviewContainer');
+        const sampleImageButtons = document.querySelectorAll('.sample-image');
+        const editProductModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+
+        // Event Listeners
+        logoutBtn.addEventListener('click', handleLogout);
+        addProductForm.addEventListener('submit', handleAddProduct);
+        resetFormBtn.addEventListener('click', resetAddProductForm);
+        updateProductBtn.addEventListener('click', handleUpdateProduct);
+        productImage.addEventListener('input', updateImagePreview);
+        editProductImage.addEventListener('input', updateEditImagePreview);
+        
+        sampleImageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                productImage.value = this.getAttribute('data-image');
+                updateImagePreview();
+            });
+        });
+
+        // Authentication State Observer
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                database.ref('users/' + user.uid).once('value')
+                    .then((snapshot) => {
+                        const userData = snapshot.val();
+                        if (userData) {
+                            userGreeting.textContent = `Hi, ${userData.name.split(' ')[0]}`;
+                            
+                            // Check if user is admin
+                            if (!userData.isAdmin) {
+                                Swal.fire({
+                                    title: 'Access Denied',
+                                    text: 'You do not have admin privileges to access this page.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = 'index.html';
+                                });
+                                return;
+                            }
+                            
+                            // Load products if user is admin
+                            loadProducts();
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error getting user data:', error);
+                    });
+            } else {
+                // User is signed out, redirect to login
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Functions
+        function handleLogout() {
+            auth.signOut()
+                .then(() => {
+                    window.location.href = 'index.html';
+                })
+                .catch((error) => {
+                    console.error('Logout error:', error);
+                });
+        }
+
+        function handleAddProduct(e) {
+            e.preventDefault();
+            
+            const productName = document.getElementById('productName').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productOriginalPrice = document.getElementById('productOriginalPrice').value;
+            const productCategory = document.getElementById('productCategory').value;
+            const productRating = document.getElementById('productRating').value;
+            const productImage = document.getElementById('productImage').value;
+            
+            // Show loading state
+            submitProductBtn.disabled = true;
+            submitProductBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+            
+            // Create product object
+            const product = {
+                name: productName,
+                description: productDescription,
+                price: parseFloat(productPrice),
+                category: productCategory,
+                rating: parseFloat(productRating),
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add original price if provided
+            if (productOriginalPrice) {
+                product.originalPrice = parseFloat(productOriginalPrice);
+            }
+            
+            // Add image if provided
+            if (productImage) {
+                product.image = productImage;
+            }
+            
+            // Save product to database
+            const newProductRef = database.ref('products').push();
+            newProductRef.set(product)
+                .then(() => {
+                    Swal.fire({
+                        title: 'Product Added!',
+                        text: 'Product has been successfully added to the store.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    
+                    // Reset form
+                    resetAddProductForm();
+                    
+                    // Reload products
+                    loadProducts();
+                })
+                .catch((error) => {
+                    console.error('Error adding product:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to add product. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitProductBtn.disabled = false;
+                    submitProductBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Add Product';
+                });
+        }
+
+        function resetAddProductForm() {
+            addProductForm.reset();
+            imagePreviewContainer.style.display = 'none';
+        }
+
+        function updateImagePreview() {
+            const imageUrl = productImage.value;
+            if (imageUrl) {
+                imagePreview.src = imageUrl;
+                imagePreviewContainer.style.display = 'block';
+            } else {
+                imagePreviewContainer.style.display = 'none';
+            }
+        }
+
+        function updateEditImagePreview() {
+            const imageUrl = editProductImage.value;
+            if (imageUrl) {
+                editImagePreview.src = imageUrl;
+                editImagePreviewContainer.style.display = 'block';
+            } else {
+                editImagePreviewContainer.style.display = 'none';
+            }
+        }
+
+        function loadProducts() {
+            database.ref('products').once('value')
+                .then((snapshot) => {
+                    const products = snapshot.val();
+                    productsTableBody.innerHTML = '';
+                    
+                    if (products) {
+                        let productCount = 0;
+                        Object.keys(products).forEach(key => {
+                            const product = products[key];
+                            const productRow = createProductRow(product, key);
+                            productsTableBody.appendChild(productRow);
+                            productCount++;
+                        });
+                        totalProducts.textContent = productCount;
+                    } else {
+                        productsTableBody.innerHTML = '<tr><td colspan="6" class="text-center">No products found.</td></tr>';
+                        totalProducts.textContent = '0';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading products:', error);
+                    productsTableBody.innerHTML = '<tr><td colspan="6" class="text-center">Error loading products.</td></tr>';
+                });
+        }
+
+        function createProductRow(product, key) {
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>
+                    <img src="${product.image || 'https://via.placeholder.com/50x50?text=No+Image'}" 
+                         alt="${product.name}" 
+                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                </td>
+                <td>${product.name}</td>
+                <td><span class="badge bg-secondary">${product.category}</span></td>
+                <td>₹${product.price}</td>
+                <td>
+                    <i class="fas fa-star text-warning"></i> ${product.rating || '4.0'}
+                </td>
+                <td class="action-buttons">
+                    <button class="btn btn-sm btn-outline-primary edit-product" data-id="${key}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-product" data-id="${key}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            
+            // Add event listeners to buttons
+            const editBtn = row.querySelector('.edit-product');
+            const deleteBtn = row.querySelector('.delete-product');
+            
+            editBtn.addEventListener('click', () => editProduct(key, product));
+            deleteBtn.addEventListener('click', () => deleteProduct(key, product.name));
+            
+            return row;
+        }
+
+        function editProduct(productId, product) {
+            // Populate the edit form with product data
+            document.getElementById('editProductId').value = productId;
+            document.getElementById('editProductName').value = product.name;
+            document.getElementById('editProductDescription').value = product.description;
+            document.getElementById('editProductPrice').value = product.price;
+            document.getElementById('editProductOriginalPrice').value = product.originalPrice || '';
+            document.getElementById('editProductCategory').value = product.category;
+            document.getElementById('editProductRating').value = product.rating || '4.0';
+            document.getElementById('editProductImage').value = product.image || '';
+            
+            // Update image preview
+            if (product.image) {
+                editImagePreview.src = product.image;
+                editImagePreviewContainer.style.display = 'block';
+            } else {
+                editImagePreviewContainer.style.display = 'none';
+            }
+            
+            // Show the modal
+            editProductModal.show();
+        }
+
+        function handleUpdateProduct() {
+            const productId = document.getElementById('editProductId').value;
+            const productName = document.getElementById('editProductName').value;
+            const productDescription = document.getElementById('editProductDescription').value;
+            const productPrice = document.getElementById('editProductPrice').value;
+            const productOriginalPrice = document.getElementById('editProductOriginalPrice').value;
+            const productCategory = document.getElementById('editProductCategory').value;
+            const productRating = document.getElementById('editProductRating').value;
+            const productImage = document.getElementById('editProductImage').value;
+            
+            // Show loading state
+            updateProductBtn.disabled = true;
+            updateProductBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+            
+            // Create updated product object
+            const updatedProduct = {
+                name: productName,
+                description: productDescription,
+                price: parseFloat(productPrice),
+                category: productCategory,
+                rating: parseFloat(productRating),
+                updatedAt: new Date().toISOString()
+            };
+            
+            // Add original price if provided
+            if (productOriginalPrice) {
+                updatedProduct.originalPrice = parseFloat(productOriginalPrice);
+            }
+            
+            // Add image if provided
+            if (productImage) {
+                updatedProduct.image = productImage;
+            }
+            
+            // Update product in database
+            database.ref('products/' + productId).update(updatedProduct)
+                .then(() => {
+                    Swal.fire({
+                        title: 'Product Updated!',
+                        text: 'Product has been successfully updated.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    
+                    // Hide modal
+                    editProductModal.hide();
+                    
+                    // Reload products
+                    loadProducts();
+                })
+                .catch((error) => {
+                    console.error('Error updating product:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to update product. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                })
+                .finally(() => {
+                    // Reset button state
+                    updateProductBtn.disabled = false;
+                    updateProductBtn.innerHTML = 'Update Product';
+                });
+        }
+
+        function deleteProduct(productId, productName) {
+            Swal.fire({
+                title: 'Delete Product',
+                text: `Are you sure you want to delete "${productName}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Delete product from database
+                    database.ref('products/' + productId).remove()
+                        .then(() => {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Product has been deleted.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                            
+                            // Reload products
+                            loadProducts();
+                        })
+                        .catch((error) => {
+                            console.error('Error deleting product:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Failed to delete product. Please try again.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                }
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is authenticated and is admin
+            // This is handled by the auth state observer
+        });
+    </script>
+</body>
+</html>
