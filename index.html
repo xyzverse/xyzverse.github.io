@@ -402,6 +402,9 @@
                     <li class="nav-item">
                         <a class="nav-link fw-bold" href="#" id="myOrdersBtn">My Orders</a>
                     </li>
+                    <li class="nav-item" id="adminbtn" style="display: none;">
+                        <a class="nav-link fw-bold" href="#" id="myOrdersBtn">Admin Panel</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -475,6 +478,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
+        if(localStrorage.getItem("shopeasy_admin") == "true"){
+            document.getElementById('adminbtn').style.display = "";
+        }
         // Firebase configuration with your credentials
         const firebaseConfig = {
             apiKey: "AIzaSyDcxsWDh_bvT9akEJfgZ8EtTj6aQyS2sOg",
