@@ -1,14 +1,14 @@
 {
-    "name": "",
+    "name": "XYZVERSE",
     "short_name": "",
     "icons": [
         {
-            "src": "",
+            "src": "https://i.ibb.co/cSKtLx4x/IMG-20250817-140317-099.jpg",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "",
+            "src": "https://i.ibb.co/nsNqj7Xt/IMG-20250816-114223-404.webp",
             "sizes": "512x512",
             "type": "image/png"
         }
