@@ -1001,7 +1001,9 @@
             // Add search functionality
             searchInput.addEventListener('input', performSearch);
             searchInput.addEventListener('focus', function(){
+                if(this.value == ''){
                 filterProductsByCategory("all");
+                }
                 window.location.hash = 'search';
             });
             searchInput.addEventListener('blur', function(){
@@ -1013,7 +1015,9 @@
             // Mobile search functionality
             mobileSearchInput.addEventListener('input', performSearch);
             mobileSearchInput.addEventListener('focus', function(){
+                if(this.value == ''){
                 filterProductsByCategory("all");
+                }
                 window.location.hash = 'search';
             });
             mobileSearchInput.addEventListener('blur', function(){
