@@ -1092,8 +1092,10 @@
             if(window.location.hash == ""){
                 document.getElementById('searchInput').value = '';
                 document.getElementById('mobileSearchInput').value = '';
-                document.getElementById('mobileSearchContainer').style.display = 'none';
-                loadProducts();
+                document.getElementById('mobileSearchToggle').click();
+                document.getElementById('hero').style.display = "";
+                document.getElementById('categoryFilter').style.display = "";
+                displayProducts(allProducts);
             }
         }
 
