@@ -1089,6 +1089,12 @@
                     showSharedProduct(product);
                 }
             }
+            
+            if(window.location.hash == "#"){
+                searchInput.value = "";
+                searchInput.style.display = "none";
+                loadProducts();
+            }
         }
 
         // Show shared product popup
