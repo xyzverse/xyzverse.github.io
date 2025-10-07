@@ -65,7 +65,7 @@
         
         .card {
             border: none;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             transition: transform 0.3s, box-shadow 0.3s;
             border-radius: 12px;
             overflow: hidden;
@@ -73,13 +73,18 @@
         
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
         }
         
         .product-image {
             height: 250px;
             object-fit: cover;
             cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.05);
         }
         
         .price {
@@ -400,11 +405,13 @@
         .image-zoom-modal .modal-dialog {
             max-width: 95vw;
             max-height: 95vh;
+            z-index: 10000;
         }
         
         .image-zoom-modal .modal-content {
             background-color: rgba(0, 0, 0, 0.9);
             border: none;
+            z-index: 10000;
         }
         
         .image-zoom-modal .modal-body {
@@ -412,6 +419,7 @@
             justify-content: center;
             align-items: center;
             padding: 0;
+            overflow: hidden;
         }
         
         .image-zoom-modal .zoom-image {
@@ -419,10 +427,12 @@
             max-height: 90vh;
             transition: transform 0.3s;
             cursor: zoom-in;
+            object-fit: contain;
         }
         
         .image-zoom-modal .zoom-image.zoomed {
             cursor: zoom-out;
+            transform: scale(2);
         }
         
         .variant-options {
@@ -681,6 +691,56 @@
         padding: 0.5rem 0;
     }
     
+    /* Loading Indicator */
+    .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+        flex-direction: column;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(244, 51, 151, 0.2);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Mobile Search Toggle */
+    .mobile-search-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--dark-text);
+        font-size: 1.2rem;
+        margin-right: 1rem;
+    }
+    
+    .mobile-search-container {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    
+    .mobile-search-container.active {
+        display: block;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .whatsapp-float {
@@ -703,8 +763,11 @@
         }
         
         .search-container {
-            margin: 0.5rem 0;
-            max-width: 100%;
+            display: none;
+        }
+        
+        .mobile-search-toggle {
+            display: block;
         }
     }
     
@@ -734,6 +797,10 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="#">XYZ.COM</a>
+                <!-- Mobile Search Toggle -->
+                <button class="mobile-search-toggle" id="mobileSearchToggle">
+                    <i class="fas fa-search"></i>
+                </button>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -749,7 +816,7 @@
                     </li>
                 </ul>
                 
-                <!-- Search Bar -->
+                <!-- Search Bar for Desktop -->
                 <div class="search-container">
                     <i class="fas fa-search search-icon"></i>
                     <input type="search" class="form-control search-input" id="searchInput" placeholder="Search products...">
@@ -763,6 +830,16 @@
                         <a class="nav-link fw-bold" href="https://xyzverse.github.io/admin.html" id="myOrdersBtn">Admin Panel</a>
                     </li>
                 </ul>
+            </div>
+        </div>
+        
+        <!-- Mobile Search Container -->
+        <div class="mobile-search-container" id="mobileSearchContainer">
+            <div class="container">
+                <div class="position-relative">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="search" class="form-control search-input" id="mobileSearchInput" placeholder="Search products...">
+                </div>
             </div>
         </div>
     </nav>
@@ -783,6 +860,13 @@
     <!-- Products Section -->
     <section class="container" id="products">
         <h2 class="section-title">Products</h2>
+        
+        <!-- Loading Indicator -->
+        <div class="loading-container" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Loading amazing products...</p>
+        </div>
+        
         <div class="row g-4" id="productsContainer">
             <!-- Products will be loaded here dynamically -->
         </div>
@@ -869,6 +953,10 @@
         const imageZoomModal = new bootstrap.Modal(document.getElementById('imageZoomModal'));
         const zoomImage = document.getElementById('zoomImage');
         const searchInput = document.getElementById('searchInput');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+        const mobileSearchContainer = document.getElementById('mobileSearchContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
 
         // Global variables
         let allProducts = [];
@@ -913,12 +1001,47 @@
             searchInput.addEventListener('input', performSearch);
             searchInput.addEventListener('focus', function(){
                 filterProductsByCategory("all");
+                window.location.hash = 'search';
+            });
+            searchInput.addEventListener('blur', function(){
+                if (window.location.hash === '#search' && !searchInput.value) {
+                    history.replaceState(null, null, ' ');
+                }
+            });
+            
+            // Mobile search functionality
+            mobileSearchInput.addEventListener('input', performSearch);
+            mobileSearchInput.addEventListener('focus', function(){
+                filterProductsByCategory("all");
+                window.location.hash = 'search';
+            });
+            mobileSearchInput.addEventListener('blur', function(){
+                if (window.location.hash === '#search' && !mobileSearchInput.value) {
+                    history.replaceState(null, null, ' ');
+                }
+            });
+            
+            // Mobile search toggle
+            mobileSearchToggle.addEventListener('click', function() {
+                mobileSearchContainer.classList.toggle('active');
+                if (mobileSearchContainer.classList.contains('active')) {
+                    setTimeout(() => {
+                        mobileSearchInput.focus();
+                    }, 100);
+                }
+            });
+            
+            // Close mobile search when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mobileSearchContainer.contains(event.target) && !mobileSearchToggle.contains(event.target)) {
+                    mobileSearchContainer.classList.remove('active');
+                }
             });
         });
 
-        // Search functionality
+        // Enhanced search functionality with priority
         function performSearch() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
+            const searchTerm = searchInput.value.toLowerCase().trim() || mobileSearchInput.value.toLowerCase().trim();
             
             if (searchTerm === '') {
                 document.getElementById('hero').style.display = "";
@@ -927,11 +1050,30 @@
                 return;
             }
             
-            const filteredProducts = allProducts.filter(product => {
-                const nameMatch = product.name.toLowerCase().includes(searchTerm);
-                const descMatch = product.description.toLowerCase().includes(searchTerm);
-                return nameMatch || descMatch;
-            });
+            const filteredProducts = allProducts.map(product => {
+                let score = 0;
+                
+                // Title match (highest priority)
+                if (product.name.toLowerCase().includes(searchTerm)) {
+                    score += 3;
+                }
+                
+                // Category match (medium priority)
+                if (product.category && product.category.toLowerCase().includes(searchTerm)) {
+                    score += 2;
+                }
+                
+                // Description match (lowest priority)
+                if (product.description.toLowerCase().includes(searchTerm)) {
+                    score += 1;
+                }
+                
+                return { product, score };
+            })
+            .filter(item => item.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .map(item => item.product);
+            
             document.getElementById('hero').style.display = "none";
             document.getElementById('categoryFilter').style.display = "none";
             displayProducts(filteredProducts);
@@ -1121,20 +1263,28 @@
 
         // Load products from database
         function loadProducts() {
+            // Show loading indicator
+            loadingIndicator.style.display = 'flex';
+            productsContainer.innerHTML = '';
+            
             database.ref('products').once('value')
                 .then((snapshot) => {
                     const products = snapshot.val();
-                    productsContainer.innerHTML = '';
                     
                     if (products) {
                         allProducts = Object.entries(products).map(([key, value]) => ({ id: key, ...value }));
-                        displayProducts(allProducts);
-                        loadCategories(allProducts);
                         
-                        // Check if there's a hash on initial load
-                        if (window.location.hash) {
-                            setTimeout(handleHashChange, 100);
-                        }
+                        // Hide loading indicator after a short delay
+                        setTimeout(() => {
+                            loadingIndicator.style.display = 'none';
+                            displayProducts(allProducts);
+                            loadCategories(allProducts);
+                            
+                            // Check if there's a hash on initial load
+                            if (window.location.hash) {
+                                setTimeout(handleHashChange, 100);
+                            }
+                        }, 1000);
                     } else {
                         // If no products in database, load sample products
                         loadSampleProducts();
@@ -1423,6 +1573,8 @@
         // Open image zoom modal
         function openImageZoom(imageSrc) {
             zoomImage.src = imageSrc;
+            zoomImage.classList.remove('zoomed');
+            zoomImage.style.transform = 'scale(1)';
             imageZoomModal.show();
         }
 
@@ -1549,6 +1701,7 @@
                 confirmButtonColor: '#f43397',
                 width: '750px',
                 focusConfirm: false,
+                showCloseButton: true,
                 didOpen: () => {
                     // Add quantity change functionality
                     const minusBtn = Swal.getPopup().querySelector('.minus-btn');
@@ -2172,8 +2325,13 @@
             ];
             
             allProducts = sampleProducts.map((product, index) => ({ id: `sample-${index}`, ...product }));
-            displayProducts(allProducts);
-            loadCategories(allProducts);
+            
+            // Hide loading indicator and display products
+            setTimeout(() => {
+                loadingIndicator.style.display = 'none';
+                displayProducts(allProducts);
+                loadCategories(allProducts);
+            }, 1000);
         }
 
         // Initialize the page
