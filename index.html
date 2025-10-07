@@ -1089,10 +1089,9 @@
                     showSharedProduct(product);
                 }
             }
-            
             if(window.location.hash == ""){
-                searchInput.value = "";
-                searchInput.style.display = "none";
+                document.getElementById('searchInput').value = '';
+                document.getElementById('mobileSearchInput').value = '';
                 loadProducts();
             }
         }
