@@ -1092,7 +1092,8 @@
             if(window.location.hash == ""){
                 document.getElementById('searchInput').value = '';
                 document.getElementById('mobileSearchInput').value = '';
-                document.getElementById('mobileSearchInput').style.display = 'none';
+                document.getElementById('mobileSearchContainer').style.display = 'none';
+                loadProducts();
             }
         }
 
