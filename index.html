@@ -65,15 +65,15 @@
         
         .card {
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s, box-shadow 0.3s;
             border-radius: 12px;
             overflow: hidden;
         }
         
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
         }
         
         .product-image {
@@ -610,6 +610,77 @@
         }
     }
     
+    /* NEW STYLES FOR REQUESTED FEATURES */
+    
+    /* Search Bar Styles */
+    .search-container {
+        position: relative;
+        max-width: 400px;
+        margin-right: 1rem;
+    }
+    
+    .search-input {
+        border-radius: 50px;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        border: 1px solid #ddd;
+        transition: all 0.3s;
+    }
+    
+    .search-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(244, 51, 151, 0.25);
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--light-text);
+    }
+    
+    /* Product Description Styles */
+    .product-description {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        line-height: 1.4;
+        max-height: 4.2em;
+    }
+    
+    .see-more-link {
+        color: var(--primary-color);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: inline-block;
+    }
+    
+    .see-more-link:hover {
+        text-decoration: underline;
+    }
+    
+    /* Smoother Carousel */
+    .carousel-item {
+        transition: transform 0.4s ease-in-out;
+    }
+    
+    /* Enhanced Aesthetics */
+    .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .hero-section {
+        box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.3);
+    }
+    
+    .section-title {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        padding: 0.5rem 0;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .whatsapp-float {
@@ -629,6 +700,11 @@
         .whatsapp-tooltip {
             font-size: 12px;
             padding: 6px 10px;
+        }
+        
+        .search-container {
+            margin: 0.5rem 0;
+            max-width: 100%;
         }
     }
     
@@ -672,6 +748,13 @@
                         </ul>
                     </li>
                 </ul>
+                
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="search" class="form-control search-input" id="searchInput" placeholder="Search products...">
+                </div>
+                
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link fw-bold" href="#" id="myOrdersBtn">My Orders</a>
@@ -685,7 +768,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" id="hero">
         <div class="container text-center">
             <h1 class="display-4 fw-bold">Shop the Latest Trends</h1>
             <p class="lead">Discover amazing products at unbeatable prices</p>
@@ -699,7 +782,7 @@
 
     <!-- Products Section -->
     <section class="container" id="products">
-        <h2 class="section-title">Featured Products</h2>
+        <h2 class="section-title">Products</h2>
         <div class="row g-4" id="productsContainer">
             <!-- Products will be loaded here dynamically -->
         </div>
@@ -727,15 +810,6 @@
                     <h5>XYZ.COM</h5>
                     <p>Your one-stop destination for all your shopping needs. Quality products at affordable prices.</p>
                 </div>
-                <!--<div class="col-md-3">
-                    <h5>Categories</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white-50">Fashion</a></li>
-                        <li><a href="#" class="text-white-50">Electronics</a></li>
-                        <li><a href="#" class="text-white-50">Home & Kitchen</a></li>
-                        <li><a href="#" class="text-white-50">Beauty</a></li>
-                    </ul>
-                </div>-->
                 <div class="col-md-3">
                     <h5>Contact Us</h5>
                     <ul class="list-unstyled">
@@ -794,6 +868,7 @@
         const categoryFilter = document.getElementById('categoryFilter');
         const imageZoomModal = new bootstrap.Modal(document.getElementById('imageZoomModal'));
         const zoomImage = document.getElementById('zoomImage');
+        const searchInput = document.getElementById('searchInput');
 
         // Global variables
         let allProducts = [];
@@ -833,7 +908,34 @@
                 zoomImage.classList.remove('zoomed');
                 zoomImage.style.transform = 'scale(1)';
             });
+            
+            // Add search functionality
+            searchInput.addEventListener('input', performSearch);
+            searchInput.addEventListener('focus', function(){
+                filterProductsByCategory("all");
+            });
         });
+
+        // Search functionality
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                document.getElementById('hero').style.display = "";
+                document.getElementById('categoryFilter').style.display = "";
+                displayProducts(allProducts);
+                return;
+            }
+            
+            const filteredProducts = allProducts.filter(product => {
+                const nameMatch = product.name.toLowerCase().includes(searchTerm);
+                const descMatch = product.description.toLowerCase().includes(searchTerm);
+                return nameMatch || descMatch;
+            });
+            document.getElementById('hero').style.display = "none";
+            document.getElementById('categoryFilter').style.display = "none";
+            displayProducts(filteredProducts);
+        }
 
         // Handle hash changes for shared products
         function handleHashChange() {
@@ -1057,7 +1159,7 @@
                 productsContainer.innerHTML = `
                     <div class="col-12 text-center py-5">
                         <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">No products found in this category</h4>
+                        <h4 class="text-muted">No products found</h4>
                         <p>Try selecting a different category or check back later for new products.</p>
                     </div>
                 `;
@@ -1105,6 +1207,12 @@
                     e.preventDefault();
                     const category = this.getAttribute('data-category');
                     filterProductsByCategory(category);
+                    
+                    // Scroll to category section
+                        document.getElementById('categoryFilter').scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                 });
             });
         }
@@ -1132,6 +1240,7 @@
             const col = document.createElement('div');
             col.className = 'col-md-6 col-lg-4 col-xl-3';
             col.setAttribute("id",key);
+            
             // Create carousel for product images
             let carouselIndicators = '';
             let carouselItems = '';
@@ -1151,6 +1260,11 @@
                     </div>
                 `;
             });
+            
+            // Check if description needs truncation
+            const description = product.description || 'No description available.';
+            const needsTruncation = description.length > 100;
+            const displayDescription = needsTruncation ? description.substring(0, 100) + '...' : description;
             
             col.innerHTML = `
                 <div class="card product-card h-100">
@@ -1176,7 +1290,8 @@
                     <div class="card-body d-flex flex-column">
                         <span class="category-badge align-self-start mb-2">${product.category || 'General'}</span>
                         <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text flex-grow-1">${product.description || 'No description available.'}</p>
+                        <p class="card-text product-description flex-grow-1">${displayDescription}</p>
+                        ${needsTruncation ? `<span class="see-more-link" data-product-id="${key}">...See more</span>` : ''}
                         <div class="d-flex justify-content-between align-items-center mt-auto">
                             <div>
                                 <span class="price">₹${product.price}</span>
@@ -1205,7 +1320,104 @@
                 shareProduct(key, product.name);
             });
             
+            // Add event listener for "See more" link
+            if (needsTruncation) {
+                const seeMoreLink = col.querySelector('.see-more-link');
+                seeMoreLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showProductDetails(product, key);
+                });
+            }
+            
             return col;
+        }
+
+        // Show product details in a popup
+        function showProductDetails(product, productId) {
+            // Create carousel for product images
+            let carouselIndicators = '';
+            let carouselItems = '';
+            
+            const images = product.images || [
+                'https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+            ];
+            
+            images.forEach((image, index) => {
+                carouselIndicators += `<button type="button" data-bs-target="#details-carousel-${productId}" data-bs-slide-to="${index}" ${index === 0 ? 'class="active" aria-current="true"' : ''} aria-label="Slide ${index + 1}"></button>`;
+                carouselItems += `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                        <img src="${image}" class="d-block w-100 product-image" alt="${product.name}" data-bs-toggle="modal" data-bs-target="#imageZoomModal" onclick="openImageZoom('${image}')">
+                    </div>
+                `;
+            });
+            
+            const productDetailsHTML = `
+                <div class="product-details-popup">
+                    <div class="card product-card">
+                        <div id="details-carousel-${productId}" class="carousel slide position-relative carousel-touch" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                ${carouselIndicators}
+                            </div>
+                            <div class="carousel-inner">
+                                ${carouselItems}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#details-carousel-${productId}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#details-carousel-${productId}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <span class="category-badge align-self-start mb-2">${product.category || 'General'}</span>
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">${product.description || 'No description available.'}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="price">₹${product.price}</span>
+                                    ${product.originalPrice ? `<span class="discount ms-2">₹${product.originalPrice}</span>` : ''}
+                                </div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <span>${product.rating || '4.0'}</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary mt-3 w-100 buy-now-details" data-product-id="${productId}">
+                                <i class="fas fa-bolt me-2"></i>Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            Swal.fire({
+                title: '',
+                html: productDetailsHTML,
+                showCloseButton: true,
+                showConfirmButton: false,
+                width: '600px',
+                didOpen: () => {
+                    // Add event listener for the buy now button in the product details popup
+                    const buyNowBtn = document.querySelector('.buy-now-details');
+                    if (buyNowBtn) {
+                        buyNowBtn.addEventListener('click', () => {
+                            Swal.close();
+                            showOrderForm(product, productId);
+                        });
+                    }
+                    
+                    // Initialize the carousel for the product details
+                    const detailsCarousel = document.getElementById(`details-carousel-${productId}`);
+                    if (detailsCarousel) {
+                        new bootstrap.Carousel(detailsCarousel);
+                    }
+                }
+            });
         }
 
         // Open image zoom modal
@@ -1898,7 +2110,7 @@
             const sampleProducts = [
                 {
                     name: "Women's Floral Dress",
-                    description: "Beautiful floral print dress for summer occasions. Made with high-quality fabric for maximum comfort.",
+                    description: "Beautiful floral print dress for summer occasions. Made with high-quality fabric for maximum comfort. This elegant dress features a flattering silhouette and is perfect for weddings, parties, or casual outings. The breathable fabric ensures you stay comfortable all day long while looking absolutely stunning.",
                     price: 899,
                     originalPrice: 1299,
                     category: "Fashion",
@@ -1914,7 +2126,7 @@
                 },
                 {
                     name: "Wireless Bluetooth Headphones",
-                    description: "High-quality sound with noise cancellation feature. Perfect for music lovers and professionals.",
+                    description: "High-quality sound with noise cancellation feature. Perfect for music lovers and professionals who need to focus. These headphones offer up to 30 hours of battery life, comfortable ear cushions, and crystal clear audio quality for an immersive listening experience.",
                     price: 1999,
                     originalPrice: 2999,
                     category: "Electronics",
@@ -1929,7 +2141,7 @@
                 },
                 {
                     name: "Stainless Steel Water Bottle",
-                    description: "Keep your drinks hot or cold for hours. Eco-friendly and durable design.",
+                    description: "Keep your drinks hot or cold for hours. Eco-friendly and durable design that's perfect for daily use. The double-wall vacuum insulation maintains temperature for up to 24 hours, while the leak-proof lid ensures no spills in your bag.",
                     price: 499,
                     category: "Home & Kitchen",
                     rating: 4.0,
@@ -1943,7 +2155,7 @@
                 },
                 {
                     name: "Men's Casual Shirt",
-                    description: "Comfortable cotton shirt for everyday wear. Perfect for casual outings and office wear.",
+                    description: "Comfortable cotton shirt for everyday wear. Perfect for casual outings and office wear. This versatile shirt features a modern fit, quality stitching, and a range of color options to match any wardrobe. Made from 100% premium cotton for breathability and comfort.",
                     price: 599,
                     originalPrice: 899,
                     category: "Fashion",
