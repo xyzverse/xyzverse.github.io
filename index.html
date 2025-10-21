@@ -169,10 +169,10 @@
   .footer a:hover { color: white; }
   .footer-bottom { border-top: 1px solid #444; padding-top: 20px; margin-top: 40px; text-align: center; color: #ccc; }
   .coupon-section { background: #f9f9f9; border-radius: var(--border-radius); padding: 20px; margin-bottom: 20px; }
-  .coupon-input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 4px 0 0 4px; }
-  .coupon-btn { background: var(--primary-color); color: white; border: none; padding: 0 20px; border-radius: 0 4px 4px 0; cursor: pointer; transition: var(--transition); }
+  .coupon-input { flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 4px 0 0 4px; width: 100%;}
+  .coupon-btn { background: var(--primary-color); color: white; border: none; padding: 10px 15px; border-radius: 0 4px 4px 0; cursor: pointer; transition: var(--transition); }
   .coupon-btn:hover { background: var(--secondary-color); }
-  .remove-coupon-btn { background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; transition: var(--transition); margin-left: 10px; }
+  .remove-coupon-btn { background: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; transition: var(--transition); margin-top: 5px; }
   .remove-coupon-btn:hover { background: #c82333; }
   .shipping-options { margin-bottom: 20px; }
   .shipping-option { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
@@ -199,8 +199,8 @@
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(250, 105, 105, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(46, 125, 50, 0); } 100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); } }
   @media (max-width: 1200px) { .hero-title { font-size: 3rem; } .section-title { font-size: 2.2rem; } }
   @media (max-width: 992px) { .hero-title { font-size: 2.5rem; } .section-title { font-size: 2rem; } .product-view-image, .product-view-image img { height: 400px; } .search-container { display: none; } .mobile-search-icon { display: block; } }
-  @media (max-width: 768px) { .hero-title { font-size: 2rem; } .hero-subtitle { font-size: 1.1rem; } .cart-sidebar { width: 100%; right: -100%; } .product-view-title { font-size: 2rem; } .product-view-price { font-size: 1.7rem; } .fixed-what-btn { bottom: 85px; right: 25px;} .fixed-cart-btn { bottom: 20px; right: 20px; } .product-view-image, .product-view-image img { height: 350px; } .product-view-header { flex-direction: row; align-items: center; gap: 15px; } .product-view-buttons { flex-direction: column; } .coupon-section .d-flex { flex-direction: column; } .coupon-input { border-radius: 4px; margin-bottom: 10px; } .coupon-btn { border-radius: 4px; padding: 10px; } }
-  @media (max-width: 576px) { .hero-title { font-size: 1.8rem; } .hero-section { padding: 30px 0; } .section-title { font-size: 1.8rem; } .product-view-title { font-size: 1.7rem; } .product-view-price { font-size: 1.5rem; } .product-view-image, .product-view-image img { height: 300px; } .search-container { max-width: 100%; } .track-cancel-buttons { flex-direction: column; } }
+  @media (max-width: 768px) { .hero-title { font-size: 2rem; } .hero-subtitle { font-size: 1.1rem; } .cart-sidebar { width: 100%; right: -100%; } .product-view-title { font-size: 2rem; } .product-view-price { font-size: 1.7rem; } .fixed-what-btn { bottom: 85px; right: 25px;} .fixed-cart-btn { bottom: 20px; right: 20px; } .product-view-image, .product-view-image img { height: 400px; } .product-view-header { flex-direction: row; align-items: center; gap: 15px; } .product-view-buttons { flex-direction: column; } .coupon-section .d-flex { flex-direction: column; } .coupon-input { border-radius: 4px; margin-bottom: 10px; } .coupon-btn { border-radius: 4px; padding: 10px; } }
+  @media (max-width: 576px) { .hero-title { font-size: 1.8rem; } .hero-section { padding: 30px 0; } .section-title { font-size: 1.8rem; } .product-view-title { font-size: 1.7rem; } .product-view-price { font-size: 1.5rem; } .product-view-image, .product-view-image img { height: 400px; } .search-container { max-width: 100%; } .track-cancel-buttons { flex-direction: column; } }
   .loading { display: flex; justify-content: center; align-items: center; height: 300px; }
   .spinner { width: 50px; height: 50px; border: 5px solid rgba(211, 47, 47, 0.2); border-radius: 50%; border-top-color: var(--primary-color); animation: spin 1s linear infinite; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -241,8 +241,8 @@
   .swiper-pagination-bullet { background: rgba(255, 255, 255, 0.6); opacity: 1; }
   .swiper-pagination-bullet-active { background: white; }
   .product-view-image .swiper { height: 500px; }
-  @media (max-width: 768px) { .product-view-image .swiper { height: 350px; } }
-  @media (max-width: 576px) { .product-view-image .swiper { height: 300px; } }
+  @media (max-width: 768px) { .product-view-image .swiper { height: 400px; } }
+  @media (max-width: 576px) { .product-view-image .swiper { height: 400px; } }
   .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1100; opacity: 0; visibility: hidden; transition: var(--transition); }
   .lightbox.active { opacity: 1; visibility: visible; }
   .lightbox-content { position: relative; max-width: 90%; max-height: 90%; width: auto; height: auto; }
@@ -606,7 +606,7 @@
        <!-- Coupon Section -->
        <div class="coupon-section">
         <h6>Apply Coupon</h6>
-        <div class="d-flex">
+        <div>
          <input type="text" class="coupon-input" id="couponCode" placeholder="Enter coupon code">
          <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
          <button class="remove-coupon-btn" id="removeCouponBtn" style="display: none;" onclick="removeCoupon()">Remove</button>
@@ -1994,6 +1994,8 @@
       }
       
       //toggleCart(); // Close cart sidebar
+      cartSidebar.classList.remove('open');
+      overlay.classList.remove('active');
       showSection('checkout');
       updateCheckoutSummary();
       
